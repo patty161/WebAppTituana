@@ -6,7 +6,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>controller</servlet-name>
-        <url-pattern>/controller</url-pattern>
+        <url-pattern>/apiVentas</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

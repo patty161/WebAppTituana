@@ -3,44 +3,39 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 document.addEventListener('DOMContentLoaded', () => {
     fetchData();
 });
 
 async function fetchData() {
     try {
-        const responses = await Promise.all([
-            fetch('/api/ventas'),
-            fetch('/api/numeroVentas'),
-            fetch('/api/recibos'),
-            fetch('/api/ventasPorArticulo'),
-            fetch('/api/recibosPorFormaPago')
-        ]);
+        const response = await fetch('/WebAppTituana/apiVentas'); 
+        if (!response.ok) {
+            throw new Error(response.statusText);
+        }
+        const data = await response.json(); 
 
-        const [ventasData, numeroVentasData, recibosData, ventasPorArticuloData, recibosPorFormaPagoData] = await Promise.all(
-            responses.map(response => response.json())
-        );
-
-        document.getElementById('totalVentas').textContent = ventasData.totalVentas;
-        document.getElementById('numeroVentas').textContent = numeroVentasData.numeroVentas;
-        document.getElementById('totalRecibos').textContent = recibosData.totalRecibos;
+        document.getElementById('totalVentas').textContent = data.totalVentas;
+        document.getElementById('numeroVentas').textContent = data.numeroVentas;
+        document.getElementById('totalRecibos').textContent = data.totalRecibos;
 
         const ventasPorArticuloList = document.getElementById('ventasPorArticulo');
-        ventasPorArticuloData.forEach(item => {
+        ventasPorArticuloList.innerHTML = '';
+        data.ventasPorArticulo.forEach(item => {
             const li = document.createElement('li');
             li.textContent = `${item.articulo}: ${item.numeroVentas}`;
             ventasPorArticuloList.appendChild(li);
         });
 
-        const recibosPorFormaPagoList = document.getElementById('recibosPorFormaPago');
-        recibosPorFormaPagoData.forEach(item => {
+        const recibosFormaPagoList = document.getElementById('recibosFormaPago');
+        recibosFormaPagoList.innerHTML = ''; 
+        data.recibosFormaPago.forEach(item => {
             const li = document.createElement('li');
             li.textContent = `${item.formaPago}: ${item.numeroRecibos}`;
-            recibosPorFormaPagoList.appendChild(li);
+            recibosFormaPagoList.appendChild(li);
         });
 
     } catch (error) {
         console.error('Error', error);
-       }
+    }
 }

@@ -21,14 +21,14 @@ import java.util.List;
 
 public class VentaService {
 
-    public int getTotalVentas() throws SQLException {
-        String query = "SELECT COUNT(*) AS total_ventas FROM kxt_fac_venta";
+    public double getTotalVentas() throws SQLException {
+        String query = "SELECT SUM(total) AS total_ventas FROM kxt_fac_venta;";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query);
              ResultSet resultSet = statement.executeQuery()) {
 
             if (resultSet.next()) {
-                return resultSet.getInt("total_ventas");
+                return resultSet.getDouble("total_ventas");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -51,14 +51,14 @@ public class VentaService {
         return 0;
     }
      
-      public int getTotalRecibos() throws SQLException {
-        String query = "SELECT COUNT(*) AS totalRecibos FROM public.kxt_fac_venta_cobro";
+      public double getTotalRecibos() throws SQLException {
+        String query = "SELECT SUM(valor) AS totalRecibos FROM public.kxt_fac_venta_cobro"; 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query);
              ResultSet resultSet = statement.executeQuery()) {
 
             if (resultSet.next()) {
-                return resultSet.getInt("totalRecibos");
+                return resultSet.getDouble("totalRecibos");
             }
         } catch (SQLException e) {
             e.printStackTrace();
